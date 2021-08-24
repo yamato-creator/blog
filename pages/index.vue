@@ -5,6 +5,7 @@
         <div class="thumb">
           <img :src="post.fields.image.fields.file.url">
         </div>
+        <h1>テストです</h1>
         <div class="post-text">
           <p>{{ formatDate(post.sys.createdAt) }}</p>
           <h2>{{ post.fields.title }}</h2>
