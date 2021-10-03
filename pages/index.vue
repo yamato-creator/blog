@@ -49,6 +49,7 @@
                 <v-btn
                   text
                   color="primary"
+                  :to="linkTo(post)"
                 >
                   この記事をみる
                 </v-btn>
@@ -68,6 +69,11 @@
 import client from '~/plugins/contentful'
 
 export default {
+  computed: {
+    linkTo: () => (obj) => {
+      return { name: 'posts-slug', params: { slug: obj.fields.slug } }
+    }
+  },
   async asyncData({ env }) {
     let posts = []
     await client.getEntries({
