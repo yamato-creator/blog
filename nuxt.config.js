@@ -1,3 +1,5 @@
+import colors from 'vuetify/es5/util/colors'
+
 require("dotenv").config()
 const client = require("./plugins/contentful")
 export default {
@@ -5,7 +7,7 @@ export default {
   head: {
     title: 'blog',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'ja'
     },
     meta: [
       { charset: 'utf-8' },
@@ -24,7 +26,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/contentful'
+    'plugins/vuetify',
+    'plugins/contentful',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -37,7 +40,8 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/dotenv',
-    '@nuxtjs/markdownit'
+    '@nuxtjs/markdownit',
+    '@nuxtjs/vuetify'
   ],
   markdownit: {
     injected: true,
@@ -45,6 +49,7 @@ export default {
     linkify: true,
     typography: true,
   },
+  //動的ルーターのパラメータを設定
   generate: {
     routes() {
       return client
@@ -60,11 +65,34 @@ export default {
     }
   },
   env: {
+    // contentful
     CTF_SPACE_ID: process.env.CTF_SPACE_ID,
-    CTF_ACCESS_TOKEN: process.env.CTF_ACCESS_TOKEN,
+    CTF_BLOG_POST_TYPE_ID: process.env.CTF_BLOG_POST_TYPE_ID,
+    CTF_CDA_ACCESS_TOKEN: process.env.CTF_CDA_ACCESS_TOKEN
+  },
+
+  vuetify: {
+    theme: {
+      themes: {
+        light: {
+          primary: colors.blue.darken2,
+          accent: colors.grey.darken3,
+          secondary: colors.amber.darken3,
+          info: colors.teal.lighten1,
+          warning: colors.amber.base,
+          error: colors.deepOrange.accent4,
+          success: colors.green.accent3,
+          twitter: '#55acee',
+          facebook: '#3b5998',
+          background: colors.grey.lighten5
+        }
+      }
+    }
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    transpile: ['vuetify/lib'],	// 追記
+    extend(config, ctx) {}
   }
 }

@@ -1,90 +1,80 @@
 <template>
-  <section class="latest-posts">
-    <div class="posts">
-      <nuxt-link :to="'posts/'+post.fields.slug" class="post" v-for="(post, index) in posts" :key="index">
-        <div class="thumb">
-          <img :src="post.fields.image.fields.file.url">
+  <v-container fluid>
+    <v-row
+      justify="center"
+    >
+      <v-col
+        cols="12"
+        sm="11"
+        md="10"
+        xl="8"
+      >
+        <v-row v-if="posts.length">
+          <v-col
+            v-for="(post, i) in posts"
+            :key="i"
+            cols="12"
+            sm="6"
+            lg="4"
+            xl="3"
+          >
+            <v-card
+              max-width="400"
+              class="mx-auto"
+            >
+              <v-img
+                :src="post.fields.image.fields.file.url"
+                :alt="post.fields.image.fields.title"
+                :aspect-ratio="16/9"
+                max-height="200"
+                class="white--text"
+              >
+                <v-card-title class="align-end fill-height font-weight-bold">
+                  {{ post.fields.title }}
+                </v-card-title>
+              </v-img>
+
+              <v-card-text>
+                {{ post.fields.publishDate }}
+              </v-card-text>
+
+              <v-list-item three-line style="min-height: unset;">
+                <v-list-item-subtitle>
+                  {{ post.fields.body }}
+                </v-list-item-subtitle>
+              </v-list-item>
+
+              <v-card-actions>
+                <v-spacer />
+                <v-btn
+                  text
+                  color="primary"
+                >
+                  この記事をみる
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+        <div v-else class="text-center">
+          投稿された記事はありません。
         </div>
-        <h1>3回目のテストです</h1>
-        <div class="post-text">
-          <p>{{ formatDate(post.sys.createdAt) }}</p>
-          <h2>{{ post.fields.title }}</h2>
-        </div>
-      </nuxt-link>
-    </div>
-  </section>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 import client from '~/plugins/contentful'
+
 export default {
-  asyncData({ params }) {
-    return client
-      .getEntries({
-        content_type: 'post',
-        order: '-sys.createdAt',
-      })
-      .then(entries => {
-        return { posts: entries.items }
-      })
-      .catch(e => console.log(e))
-  },
-  head: {
-    title: '記事一覧',
-  },
-  methods: {
-    formatDate(iso) {
-      const date = new Date(iso)
-      const yyyy = new String(date.getFullYear())
-      const mm = new String(date.getMonth() + 1).padStart(2, "0")
-      const dd = new String(date.getDate()).padStart(2, "0")
-      return `${yyyy}.${mm}.${dd}`
-    }
+  async asyncData({ env }) {
+    let posts = []
+    await client.getEntries({
+      content_type: env.CTF_BLOG_POST_TYPE_ID,
+      order: '-fields.publishDate'
+    }).then(res => (posts = res.items)).catch(console.error)
+    return { posts }
   }
 }
 </script>
-
-<style lang="scss">
-section.latest-posts {
-  padding: 10px;
-  .posts {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 10px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    background: #ddd;
-    a.post {
-      width: calc(100% / 2 - 20px);
-      @media (min-width: (768px)) {
-        width: calc(100% / 3 - 20px);
-      }
-      margin: 10px;
-      background: #fff;
-      text-decoration: none;
-      color: #111;
-      .thumb {
-        width: 100%;
-        padding-bottom: 75%;
-        position: relative;
-        overflow: hidden;
-        img {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          max-width: 100%;
-        }
-      }
-      .post-text {
-        padding: 5px 10px 10px;
-        h2 {
-          width: fit-content;
-          font-size: 20px;
-        }
-      }
-    }
-  }
-}
-</style>
