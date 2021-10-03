@@ -23,8 +23,8 @@
               class="mx-auto"
             >
               <v-img
-                :src="post.fields.image.fields.file.url"
-                :alt="post.fields.image.fields.title"
+                :src="setEyeCatch(post).url"
+                :alt="setEyeCatch(post).title"
                 :aspect-ratio="16/9"
                 max-height="200"
                 class="white--text"
@@ -67,9 +67,11 @@
 
 <script>
 import client from '~/plugins/contentful'
+import { mapGetters } from 'vuex'
 
 export default {
   computed: {
+    ...mapGetters(['setEyeCatch']),
     linkTo: () => (obj) => {
       return { name: 'posts-slug', params: { slug: obj.fields.slug } }
     }
