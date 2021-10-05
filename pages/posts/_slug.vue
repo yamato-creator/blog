@@ -40,7 +40,7 @@ import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters(['setEyeCatch'])
-  },getEntries
+  },
   async asyncData({ env, params }) {
     let currentPost = null
     await client.getEntries({
