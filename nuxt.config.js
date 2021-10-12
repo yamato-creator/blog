@@ -1,7 +1,8 @@
 import colors from 'vuetify/es5/util/colors'
+const client = require('./plugins/contentful').default
 
 require("dotenv").config()
-const client = require("./plugins/contentful")
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -43,11 +44,35 @@ export default {
     '@nuxtjs/markdownit',
     '@nuxtjs/vuetify'
   ],
+
   markdownit: {
     injected: true,
     html: true,
     linkify: true,
     typography: true,
+  },
+
+  //動的ルーターのパラメータを設定
+  generate: {
+    routes() {
+      return Promise.all([
+        client.getEntries({
+          content_type: process.env.CTF_BLOG_POST_TYPE_ID
+        })
+      ]).then(([ posts ]) => {
+        return [
+          ...posts.items.map(post => {
+            return { route: `posts/${post.fields.slug}`, payload: post }
+          })
+        ]
+      })
+    }
+  },
+
+  router: {
+    middleware: [
+      'getContentful'
+    ]
   },
 
   env: {

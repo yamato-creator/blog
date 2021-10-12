@@ -12,6 +12,12 @@
       />
       {{ currentPost.fields.publishDate }}<br>
       {{ currentPost.fields.body }}
+
+      <v-breadcrumbs :items="breadcrumbs">
+        <template #divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
     </template>
 
     <template v-else>
@@ -34,21 +40,27 @@
 </template>
 
 <script>
-import client from '~/plugins/contentful'
 import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['setEyeCatch'])
+    ...mapGetters(['setEyeCatch']),
+     breadcrumbs() {
+      const category = this.currentPost.fields.category
+      return [
+        { text: 'ホーム', to: '/' },
+        { text: category.fields.name, to: '#' }
+      ]
+    }
   },
-  async asyncData({ env, params }) {
-    let currentPost = null
-    await client.getEntries({
-      content_type: env.CTF_BLOG_POST_TYPE_ID,
-      'fields.slug': params.slug
-    }).then(res => (currentPost = res.items[0])).catch(console.error)
+  async asyncData({ payload, store, params, error }) {
+    const currentPost = payload || await store.state.posts.find(post => post.fields.slug === params.slug)
 
-    return { currentPost }
+    if (currentPost) {
+      return { currentPost }
+    } else {
+      return error({ statusCode: 400 })
+    }
   }
 }
 </script>
