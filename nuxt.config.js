@@ -29,6 +29,7 @@ export default {
   plugins: [
     'plugins/vuetify',
     'plugins/contentful',
+    'plugins/components'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -58,11 +59,17 @@ export default {
       return Promise.all([
         client.getEntries({
           content_type: process.env.CTF_BLOG_POST_TYPE_ID
+        }),
+        client.getEntries({
+          content_type: 'category'
         })
-      ]).then(([ posts ]) => {
+      ]).then(([posts, categories]) => {
         return [
           ...posts.items.map(post => {
             return { route: `posts/${post.fields.slug}`, payload: post }
+          }),
+          ...categories.items.map((category) => {
+            return { route: `categories/${category.fields.slug}`, payload: category }
           })
         ]
       })

@@ -1,5 +1,6 @@
 <template>
   <v-container fluid>
+    <breadcrumbs :add-items="addBreads" />
     <template v-if="currentPost">
       {{ currentPost.fields.title }}
       <v-img
@@ -44,7 +45,16 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['setEyeCatch']),
+    ...mapGetters(['setEyeCatch', 'linkTo']),
+    addBreads() {
+      return [
+        {
+          icon: 'mdi-folder-outline',
+          text: this.category.fields.name,
+          to: this.linkTo('categories', this.category)
+        }
+      ]
+    },
      breadcrumbs() {
       const category = this.currentPost.fields.category
       return [
@@ -57,7 +67,10 @@ export default {
     const currentPost = payload || await store.state.posts.find(post => post.fields.slug === params.slug)
 
     if (currentPost) {
-      return { currentPost }
+      return {
+        currentPost,
+        category: currentPost.fields.category
+      }
     } else {
       return error({ statusCode: 400 })
     }
