@@ -15,7 +15,7 @@ export const getters = {
   },
   linkTo: () => (name, obj) => {
     return { name: `${name}-slug`, params: { slug: obj.fields.slug } }
-  }
+  },
 }
 
 export const mutations = {

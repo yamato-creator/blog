@@ -66,7 +66,7 @@
                 <v-btn
                   text
                   color="primary"
-                  :to="linkTo(post)"
+                  :to="linkTo('posts', post)"
                 >
                   この記事をみる
                 </v-btn>
@@ -97,12 +97,12 @@ export default {
       return (category) => {
         switch (category.fields.name) {
           case 'PHP': return '#C73A31'
-          case 'other': return '#236244'
+          case 'Nuxt.js': return '#236244'
           case 'movie': return 'primary'
           default: return 'grey darken-3'
         }
       }
     }
-  }
+  },
 }
 </script>
