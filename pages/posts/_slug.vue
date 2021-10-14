@@ -13,12 +13,7 @@
       />
       {{ currentPost.fields.publishDate }}<br>
       {{ currentPost.fields.body }}
-
-      <v-breadcrumbs :items="breadcrumbs">
-        <template #divider>
-          <v-icon>mdi-chevron-right</v-icon>
-        </template>
-      </v-breadcrumbs>
+      <breadcrumbs :add-items="addBreads" />
     </template>
 
     <template v-else>

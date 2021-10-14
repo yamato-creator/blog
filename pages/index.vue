@@ -60,6 +60,28 @@
                   {{ post.fields.body }}
                 </v-list-item-subtitle>
               </v-list-item>
+              <v-card-text>
+                <template v-if="post.fields.tags">
+                  <v-chip
+                    v-for="(tag) in post.fields.tags"
+                    :key="tag.sys.id"
+                    :to="linkTo('tags', tag)"
+                    small
+                    label
+                    outlined
+                    class="ma-1"
+                  >
+                    <v-icon
+                      left
+                      size="18"
+                      color="grey"
+                    >
+                      mdi-label
+                    </v-icon>
+                    {{ tag.fields.name }}
+                  </v-chip>
+                </template>
+              </v-card-text>
 
               <v-card-actions>
                 <v-spacer />
