@@ -32,13 +32,22 @@
         <span class="ml-1">ホームへ戻る</span>
       </v-btn>
     </div>
+    <client-only>
+    <share-btns :page-title="currentPost.fields.title" />
+    <follow-btns />
+  </client-only>
   </v-container>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import shareBtns from '~/components/ui/shareBtns'
+import followBtns from '~/components/ui/followBtns'
 
 export default {
+  components: {
+    shareBtns, followBtns
+  },
   computed: {
     ...mapGetters(['setEyeCatch', 'linkTo']),
     addBreads() {

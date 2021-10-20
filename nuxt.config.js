@@ -37,13 +37,14 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    '@nuxtjs/vuetify',
+    ['@nuxtjs/vuetify', { /* module options */ }]
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/dotenv',
     '@nuxtjs/markdownit',
-    '@nuxtjs/vuetify'
   ],
 
   markdownit: {
@@ -92,11 +93,16 @@ export default {
     // contentful
     CTF_SPACE_ID: process.env.CTF_SPACE_ID,
     CTF_BLOG_POST_TYPE_ID: process.env.CTF_BLOG_POST_TYPE_ID,
-    CTF_CDA_ACCESS_TOKEN: process.env.CTF_CDA_ACCESS_TOKEN
+    CTF_CDA_ACCESS_TOKEN: process.env.CTF_CDA_ACCESS_TOKEN,
+    // twitter
+    BASE_URL: process.env.BASE_URL || 'http://localhost:3000',	  // 追記
+    SITE_NAME: process.env.SITE_NAME,
+    TWITTER_ACCOUNT: process.env.TWITTER_ACCOUNT,
   },
 
   vuetify: {
     theme: {
+      dark: false,
       themes: {
         light: {
           primary: colors.blue.darken2,
@@ -108,7 +114,7 @@ export default {
           success: colors.green.accent3,
           twitter: '#55acee',
           facebook: '#3b5998',
-          background: colors.grey.lighten5
+          background: colors.grey.lighten5,
         }
       }
     }
